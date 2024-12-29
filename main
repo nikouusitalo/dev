@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#script location
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+filteri=""
+test_run="0"
+while [[ $# -gt 0 ]]; do
+   if [[ $1 == "--test_run" ]]; then
+        test_run="1"
+    else
+        filteri="$1"
+   fi
+   shift
+done
+log(){
+if [[ $test_run == "1" ]]; then
+    echo "[TEST_RUN]:" "$@"
+    else
+     echo "$@"
+fi
+}
+execute(){
+    log "execute" "$@"
+if [[ $test_run == "1" ]]; then
+    return    
+    fi
+    "$@"
+}
+log "$SCRIPT_DIR -- $filteri"
+
+scripts=$(find ./runs -maxdepth 1 -mindepth 1 -executable -type f )
+
+for script in $scripts; do
+if echo "$script" | grep -qv "$filteri"; then
+        log "filtering $script"
+        continue
+    fi
+    execute ./"$script"
+done

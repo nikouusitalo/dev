@@ -1,0 +1,6 @@
+require("nikouu.lazy")
+require("nikouu.lsp")
+require("nikouu.treesitter")
+require("nikouu.telescope")
+require("nikouu.trouble")
+require("nikouu.dap")
