@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+stow home
+stow -t ~/.config config
+
