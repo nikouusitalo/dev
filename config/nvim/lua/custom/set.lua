@@ -5,7 +5,9 @@ vim.g.netrw_winsize = 25
 vim.opt.nu = true
 vim.opt.relativenumber = true
 --vim.cmd 'colorscheme vim'
-vim.cmd 'colorscheme koehler'
+vim.cmd.colorscheme("gruber-darker")
+vim.cmd([[highlight Normal guibg=#000000]])
+vim.cmd([[highlight NormalNC guibg=#000000]])
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4

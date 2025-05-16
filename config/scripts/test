@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Specify the path to your w3m configuration file
+W3M_DIR="$HOME/.config/w3m"
+
+# Run w3m with the specified configuration file and open www.google.fi
+exec foot w3m -config $W3M_DIR www.google.fi
+

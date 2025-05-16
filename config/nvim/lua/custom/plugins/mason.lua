@@ -1,6 +1,6 @@
 return {
 	{
-		"williamboman/mason.nvim",
+		"mason-org/mason.nvim",
 		build = ":MasonUpdate",
 		config = function()
 			require("mason").setup()
@@ -8,17 +8,30 @@ return {
 	},
 	{
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
-		dependencies = { "williamboman/mason.nvim" },
+		dependencies = { "williamboman/mason.nvim", "jay-babu/mason-nvim-dap.nvim" },
+
 		config = function()
 			require("mason-tool-installer").setup({
-				ensure_installed = { "lua-language-server", "clangd" },
-				run_on_start     = true,
-				start_delay      = 3000,
+				ensure_installed = {
+					"typescript-language-server",
+					"lua-language-server",
+					"clangd",
+					"stylua",
+					"matlab-language-server",
+					"pyright",
+					"bashls",
+					"marksman",
+					"gopls",
+					"cssls",
+					"jsonls",
+				},
+				run_on_start = true,
+				start_delay = 3000,
 			})
 		end,
 	},
 	{
 		"williamboman/mason-lspconfig.nvim",
 		dependencies = { "williamboman/mason.nvim" },
-	}
+	},
 }
