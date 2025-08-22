@@ -58,36 +58,36 @@ tooltip {
 }
 
 #tray {
-    background-color: #d4be98;
-    border: 2px solid #c7ab7a;
+    background-color: #303536;
+    border: 2px solid #434a4c;
 }
 
 #battery {
-    background-color: #a9b665;
-    border: 2px solid #c7ab7a;
-    color: #6c782e;
+    background-color: #303536;
+    border: 2px solid #434a4c;
+    color: #d4be98;
 }
 
 #cpu,
 #memory,
 #network,
 #pulseaudio {
-    background-color: #ddc7a1;
-    border: 2px solid #c7ab7a;
-    color: #1d2021;
+    background-color: #303536;
+    border: 2px solid #434a4c;
+    color: #d4be98;
 }
 
 #cpu.critical,
 #memory.critical {
-    background-color: #ddc7a1;
-    border: 2px solid #c7ab7a;
-    color: #c14a4a;
+    background-color: #303536;
+    border: 2px solid #434a4c;
+    color: #d4be98;
 }
 
 #battery.warning,
 #battery.critical,
 #battery.urgent {
-    background-color: #ddc7a1;
-    border: 2px solid #c7ab7a;
-    color: #c14a4a;
+    background-color: #303536;
+    border: 2px solid #434a4c;
+    color: #d4be98;
 }

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Käynnistä transmission-daemon jos ei ole jo käynnissä
+if ! pidof transmission-daemon >/dev/null; then
+    transmission-daemon
+    notify-send "📡 Käynnistetään transmission-daemon..."
+    sleep 3
+fi
+
+# Lisää torrent
+if transmission-remote -a "$@"; then
+    notify-send "🔽 Torrent lisätty onnistuneesti."
+else
+    notify-send "❌ Torrentin lisäys epäonnistui."
+fi

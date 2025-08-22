@@ -1,0 +1,9 @@
+root = /home/nikouu/holvi/vault
+root = ssh://nikouu@www.nikouusitalo.fi//home/nikouu/holvi/vault
+
+auto = true
+batch = true
+prefer = newer
+fastcheck = true
+times = true
+

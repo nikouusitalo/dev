@@ -1,3 +1,7 @@
+libimobiledevice
+usbmuxd
+ttf-jetbrains-mono-nerd
+hyprland
 libinput
 wayland
 wlroots
@@ -10,14 +14,11 @@ xorg-server
 xorg-xinit
 xorg-xrandr
 xorg-xsetroot
+xorg-xwayland
 surfraw
-android-file-transfer
 man-db
 fzf
 polkit-kde-agent
-bemenu
-bemenu-wayland
-blueman
 brightnessctl
 cdrtools
 chafa
@@ -51,7 +52,6 @@ waybar
 wf-recorder
 wl-clipboard
 xdg-desktop-portal-wlr
-xorg-xwayland
 zathura
 mpv
 ytfzf

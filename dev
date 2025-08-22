@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
-stow home
+stow -t ~/ home
 stow -t ~/.config config
+stow -t ~/.local/bin bin
+
+stow -t ~/.local/share share
 

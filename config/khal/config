@@ -1,0 +1,12 @@
+[calendars]
+[[home]]
+path = ~/holvi/vault/calendars/mycal/home/
+type = calendar
+
+[[work]]
+path = ~/holvi/vault/calendars/mycal/work/
+type = calendar
+
+[default]
+default_calendar = home
+

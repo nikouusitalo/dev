@@ -1,0 +1,15 @@
+#!/bin/bash
+
+IPHONE_FOUND=0
+
+while true; do
+    if lsusb | grep -qi "Apple"; then
+        if [ $IPHONE_FOUND -eq 0 ]; then
+            echo "iPhone on yhdistetty"
+            IPHONE_FOUND=1
+        fi
+    else
+        IPHONE_FOUND=0
+    fi
+    sleep 2
+done

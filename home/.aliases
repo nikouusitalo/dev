@@ -1,4 +1,7 @@
+
 #ALIAS
+alias matlab="/usr/local/MATLAB/R2024b/bin/matlab -nodesktop -nosplash"
+
 alias music="ncmpcpp"
 #youtube download
 alias yta-aac="yt-dlp --extract-audio --audio-format aac "

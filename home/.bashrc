@@ -1,4 +1,6 @@
-
+if [ -f "$HOME/.aliases" ]; then
+    . "$HOME/.aliases"
+fi
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
@@ -40,10 +42,9 @@ ww(){  w3m https://lite.duckduckgo.com/lite/?q="$*"; }
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-if [ -f ~/.aliases ]; then
-    . ~/.aliases
-fi
 
+alias kk="task ghistory"
+alias arvio="task burndown.weekly"
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
@@ -86,3 +87,5 @@ ex ()
 parse_git_branch() {
     git branch 2>/dev/null | grep '^*' | colrm 1 2
 }
+
+export PATH=$PATH:$(go env GOPATH)/bin
