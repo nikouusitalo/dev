@@ -17,7 +17,6 @@ HISTFILESIZE=2000
 shopt -s checkwinsize
 shopt -s histappend 
 shopt -s cdspell
-bind "set completion-ignore-case on"
 
 
 # Append to history, don't overwrite

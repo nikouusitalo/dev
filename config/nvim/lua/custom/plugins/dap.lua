@@ -101,6 +101,26 @@ return {
 			},
 		}
 
+        
+local dap = require("dap")
+dap.adapters.python = {
+  type = 'executable',
+  command = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python",
+  args = { "-m", "debugpy.adapter" },
+}
+
+dap.configurations.python = {
+  {
+    type = "python",
+    request = "launch",
+    name = "Launch file",
+    program = "${file}",
+    pythonPath = function()
+      return vim.fn.exepath("python3") -- tai virtuaaliympäristön polku
+    end,
+  },
+}
+
 		-- c++/c/rust
 		dap.adapters.codelldb = {
 			type = "server",

@@ -4,7 +4,6 @@ ttf-jetbrains-mono-nerd
 hyprland
 libinput
 wayland
-wlroots
 wayland-protocols
 pkgconf
 libxcb

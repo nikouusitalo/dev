@@ -4,6 +4,7 @@ return {
 	config = function()
 		require("conform").setup({
 			formatters_by_ft = {
+				python = { "isort", "black" },
 				lua = { "stylua" },
 				go = { "gofmt" },
 				haskell = { "ormolu" },
