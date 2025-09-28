@@ -15,6 +15,8 @@ return {
 		"L3MON4D3/LuaSnip",
 		"saadparwaiz1/cmp_luasnip",
 		"j-hui/fidget.nvim",
+		"saghen/blink.cmp",
+		"rafamadriz/friendly-snippets",
 	},
 
 	config = function()
@@ -66,15 +68,18 @@ return {
 		})
 
 		require("mason-null-ls").setup({
-			ensure_installed = { "pylint", "black", "stylua", "isort", "clang_format" }, -- lintterit/formatterit
+			ensure_installed = { "pylint", "black", "stylua", "isort", "clang_format" }, -- lintterit/formatteritlsp
 		})
 
 		local cmp_select = { behavior = cmp.SelectBehavior.Select }
+		require("luasnip.loaders.from_vscode").lazy_load()
 
 		cmp.setup({
 			snippet = {
 				expand = function(args)
+					vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
 					require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
+					-- vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
 				end,
 			},
 			mapping = cmp.mapping.preset.insert({
@@ -85,7 +90,10 @@ return {
 			}),
 			sources = cmp.config.sources({
 				{ name = "nvim_lsp" },
+				{ name = "vsnip" }, -- For vsnip users.
 				{ name = "luasnip" }, -- For luasnip users.
+				-- { name = 'ultisnips' }, -- For ultisnips users.
+				-- { name = 'snippy' }, -- For snippy users.
 			}, {
 				{ name = "buffer" },
 			}),
