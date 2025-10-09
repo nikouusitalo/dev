@@ -1,0 +1,25 @@
+/* ~/.config/rofi/config.rasi */
+
+configuration {
+    /* Mitkä "modet" halutaan: tässä käytetään vain run */
+    modi: "run";
+    show-icons: false;        /* haluatko kuvakkeet (true/false) */
+    font: "monospace 12";
+    /* Prompt-teksti */
+    run-display-format: "{name}";
+    display-run: "run:";
+    /* Ikkunan sijainti */
+    location: 0;               /* 0 = keskellä näytöllä (vertikaalisesti) */
+    yoffset: 0;
+    xoffset: 0;
+    /* Muita asetuksia, joiden avulla ulkoasua voi hienosäätää */
+    fixed-num-lines: true;
+    lines: 10;
+    scroll-method: 0;
+}
+
+/* @theme-komennolla voit tuoda ulkoasuteeman tai väritiedoston */
+
+
+
+@theme "/usr/share/rofi/themes/gruvbox-dark.rasi"
