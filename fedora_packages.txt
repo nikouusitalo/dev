@@ -1,0 +1,4 @@
+sway
+jetbrains-mono-fonts-all
+go
+stow

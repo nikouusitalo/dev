@@ -1,6 +1,23 @@
-if [ -f "$HOME/.aliases" ]; then
-    . "$HOME/.aliases"
+# .bashrc
+
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
 fi
+
+# User specific environment
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+export PATH
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+
+
+
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
@@ -82,9 +99,12 @@ ex ()
     echo "'$1' is not a valid file"
   fi
 }
-# Showing the current Git branch in the prompt
+
+
+##Alise
 parse_git_branch() {
-    git branch 2>/dev/null | grep '^*' | colrm 1 2
+  git branch 2>/dev/null | sed -n '/\* /s///p'
 }
 
-export PATH=$PATH:$(go env GOPATH)/bin
+export PS1="-> \[\e[32m\]\$(parse_git_branch)\[\e[0m\] "
+

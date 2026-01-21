@@ -24,8 +24,10 @@ export OPENER="xdg-open"
 export COLORTERM="truecolor"
 export VIDEO="mpv"
 export BROWSERCLI="w3m"
-# Created by `pipx` on 2024-07-08 02:05:49
-export PATH="$PATH:/home/nikouu/.local/bin"
-export QT_QPA_PLATFORM=xcb
-export PS1="-> "
+
+parse_git_branch() {
+  git branch 2>/dev/null | sed -n '/\* /s///p'
+}
+
+export PS1="-> \[\e[32m\]\$(parse_git_branch)\[\e[0m\] "
 
