@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Read the list of packages from the file
-mapfile -t packages < packages.txt
+mapfile -t packages < fedora_packages.txt
 
 # Install the packages
 sudo dnf install "${packages[@]}"

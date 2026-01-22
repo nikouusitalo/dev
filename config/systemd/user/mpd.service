@@ -3,8 +3,9 @@ Description=Music Player Daemon
 After=sound.target
 
 [Service]
-ExecStart=/usr/bin/mpd --no-daemon %h/.config/mpd/mpd.conf
+ExecStart=/usr/bin/mpd --no-daemon /home/nikouu/.config/mpd/mpd.conf
+Restart=always
+RestartSec=5
 
 [Install]
 WantedBy=default.target
-

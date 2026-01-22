@@ -1,4 +1,13 @@
+tree
+fzf
+udiskie
 sway
+waybar
 jetbrains-mono-fonts-all
 go
 stow
+nvim
+google-chrome-stable
+rofi
+mako
+ncmpcpp

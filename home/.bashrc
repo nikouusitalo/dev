@@ -1,5 +1,9 @@
 # .bashrc
-
+# tab-complete
+bind 'set completion-ignore-case on'
+bind 'set show-all-if-ambiguous on'
+bind 'set menu-complete-display-prefix on'
+bind '"\t": menu-complete'
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
@@ -12,53 +16,21 @@ if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
 fi
 export PATH
 
-# Uncomment the following line if you don't like systemctl's auto-paging feature:
-# export SYSTEMD_PAGER=
 
 
-
-
-
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoredups:ignorespace # Ignore duplicates and leading-space commands in history
-# append to the history file, don't overwrite it
+export HISTSIZE=100000
+export HISTFILESIZE=200000
+export HISTCONTROL=ignoredups:erasedups
+export HISTIGNORE="ls:tree:pwd:exit:clear"
 shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
-
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
-shopt -s histappend 
-shopt -s cdspell
+PROMPT_COMMAND="history -a; history -c; history -r"
 
 
-# Append to history, don't overwrite
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
 goo() {
     IFS=+ w3m https://google.com/search?hl=en\&q="$*"
 }
 
 ww(){  w3m https://lite.duckduckgo.com/lite/?q="$*"; }
-# colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# some more ls aliases
-#alias ll='ls -l'
-#alias la='ls -A'
-#alias l='ls -CF'
-
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-
 alias kk="task ghistory"
 alias arvio="task burndown.weekly"
 # enable programmable completion features (you don't need to enable
