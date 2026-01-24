@@ -8,6 +8,8 @@ exec mako
 exec udiskie &
 exec --no-startup-id /usr/libexec/polkit-gnome-authentication-agent-1
 
+
+
 # Default config for sway
 #
 # Copy this to ~/.config/sway/config and edit it to your liking.
@@ -144,17 +146,7 @@ bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
-#
-# Workspaces:
-workspace number 12 output eDP-1
-
-# HDMI (jos olemassa)
-workspace number 6 output HDMI-A-1
-workspace number 7 output HDMI-A-1
-
-# DisplayPort (jos olemassa)
-workspace number 8 output DP-1
-workspace number 9 output DP-1
+workspace 12 output eDP-1
 
     # Switch to workspace
     bindsym $mod+6 workspace number 6
