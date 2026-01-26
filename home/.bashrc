@@ -1,3 +1,4 @@
+. /home/nikouu/.local/share/cht/bash_completion
 # .bashrc
 # tab-complete
 bind 'set completion-ignore-case on'
@@ -9,6 +10,9 @@ bind '"\t": menu-complete'
 if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
+
+export N_PREFIX="$HOME/.local/npm"
+export PATH="$HOME/.local/npm/bin:$PATH"
 
 # User specific environment
 if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
@@ -79,4 +83,5 @@ parse_git_branch() {
 }
 
 export PS1="-> \[\e[32m\]\$(parse_git_branch)\[\e[0m\] "
+eval "$(zoxide init bash)"
 

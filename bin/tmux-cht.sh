@@ -1,22 +1,37 @@
+
 #!/usr/bin/env bash
+set -euo pipefail
 
-# Select from languages or commands using fzf
-selected=$(cat ~/.local/bin/tmux-cht-languages  ~/.local/bin/tmux-cht-command | fzf)
-if [[ -z $selected ]]; then
-    exit 0
-fi
+langs_file="$HOME/.local/bin/tmux-cht-languages"
+cmds_file="$HOME/.local/bin/tmux-cht-command"
 
-# Read user input without using the -r flag
-read -p "Enter Query: " query
+# Valitse kieli tai komento
+selected="$(
+  cat "$langs_file" "$cmds_file" | fzf --prompt="cht.sh > " --height=40% --reverse
+)"
 
-# Check if the selected item is a language
-if grep -qs "$selected" ~/.local/bin/tmux-cht-languages; then
-    # Replace spaces with '+' in the query (quote the variable to prevent word splitting)
-    query=$(echo "$query" | tr ' ' '+')
-    
-    # Open a new tmux window and run the curl command, preventing word splitting with quotes
-    tmux neww bash -c "echo \"curl cht.sh/$selected/$query/\" && curl cht.sh/$selected/$query && while [ : ]; do sleep 1; done"
+[[ -z "${selected:-}" ]] && exit 0
+
+# Lue haku
+read -r -p "Enter Query: " query
+
+# Muunna välilyönnit plussiksi (cht.sh ymmärtää nämä hyvin)
+q="${query// /+}"
+
+# Rakenna URL
+if grep -Fxq "$selected" "$langs_file"; then
+  url="https://cht.sh/${selected}/${q}"
 else
-    # If it's a command, fetch command data and use less (quote the query to prevent word splitting)
-    curl -s cht.sh/$selected~"$query" | less
+  url="https://cht.sh/${selected}~${q}"
 fi
+
+# Komento joka näyttää ensin URL:n ja sitten sisällön pagerissa
+cmd="bash -lc 'printf \"URL: %s\n\n\" \"$url\"; curl -sS \"$url\" | less -R'"
+
+# Jos ollaan tmuxissa, avaa uuteen ikkunaan, muuten aja suoraan
+if [[ -n "${TMUX:-}" ]]; then
+  tmux new-window -n "cht:${selected}" "$cmd"
+else
+  eval "$cmd"
+fi
+

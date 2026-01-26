@@ -9,7 +9,6 @@ exec udiskie &
 exec --no-startup-id /usr/libexec/polkit-gnome-authentication-agent-1
 
 
-
 # Default config for sway
 #
 # Copy this to ~/.config/sway/config and edit it to your liking.
@@ -17,6 +16,8 @@ exec --no-startup-id /usr/libexec/polkit-gnome-authentication-agent-1
 # Read `man 5 sway` for a complete reference.
 input * {
     xkb_layout "fi"
+    xkb_options "ctrl:nocaps"
+
     }
 ### Variables
 #
@@ -28,16 +29,15 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term alacritty
+set $term wezterm 
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 #set $menu dmenu_path | dmenu | xargs swaymsg exec --
 
 set $menu rofi -show drun
-
 include /etc/sway/config-vars.d/*
-
+bindsym $mod+Shift+w exec bash -lc 'q=$(rofi -dmenu -i -p "Web search"); [ -n "$q" ] && xdg-open "https://duckduckgo.com/?q=$(printf %s "$q" | sed "s/ /+/g")"'
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
@@ -146,7 +146,24 @@ bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
-workspace 12 output eDP-1
+
+# Work profile → workspace 10
+#for_window [app_id="google-chrome" title=".*teams*"] move to workspace number 10
+
+# Chrome on workspace 7
+
+exec firefox -P teams -no-remote --new-window https://teams.microsoft.com/v2/
+for_window [app_id="firefox"            title="^teams — Mozilla Firefox$"] move to workspace number 10
+for_window [app_id="org.mozilla.firefox" title="^teams — Mozilla Firefox$"] move to workspace number 10
+
+
+
+
+# Chrome on workspace 10 with specific URL
+#exec google-chrome --new-window --profile-directory="teams" https://teams.microsoft.com/v2/
+# Käynnistyksessä avaa Chrome teams-profiililla
+
+workspace 6 output eDP-1
 
     # Switch to workspace
     bindsym $mod+6 workspace number 6
