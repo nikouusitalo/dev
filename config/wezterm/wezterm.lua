@@ -91,24 +91,37 @@ local config = (wezterm.config_builder and wezterm.config_builder()) or {}
 -- Varmista että keys-taulu on olemassa ENNEN pluginia
 config.keys = config.keys or {}
 
+config.window_close_confirmation = "NeverPrompt"
+
 config.check_for_updates = false
 config.enable_tab_bar = true
 config.color_scheme = "Brogrammer"
 config.colors = { background = "black" }
 
--- CTRL+SHIFT keybindings
+-- ALT keybindings (korjattu)
 for _, v in ipairs({
-	{ "s", "CTRL|SHIFT", wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
-	{ "t", "CTRL|SHIFT", wezterm.action.SpawnTab("CurrentPaneDomain") },
-	{ "w", "CTRL|SHIFT", wezterm.action.CloseCurrentTab({ confirm = true }) },
-	{ "h", "CTRL|SHIFT", wezterm.action.ActivateTabRelative(-1) },
-	{ "l", "CTRL|SHIFT", wezterm.action.ActivateTabRelative(1) },
-	{ "N", "CTRL|SHIFT", select_project() },
-	{ "F", "CTRL|SHIFT", open_fzf_action() },
-	{ "D", "CTRL|SHIFT", open_fzf_directory() },
-	{ "I", "CTRL|SHIFT", wezterm.action.ShowDebugOverlay },
+	{ "Enter", act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+	{ "n", act.CloseCurrentPane({ confirm = true }) },
+	{ "LeftArrow", act.ActivatePaneDirection("Left") },
+	{ "RightArrow", act.ActivatePaneDirection("Right") },
+	{ "UpArrow", act.ActivatePaneDirection("Up") },
+	{ "DownArrow", act.ActivatePaneDirection("Down") },
+	{ "t", act.SpawnTab("CurrentPaneDomain") },
+	{ "q", act.CloseCurrentTab({ confirm = true }) },
+	{ "c", act.CopyTo("ClipboardAndPrimarySelection") },
+	{ "v", act.PasteFrom("Clipboard") },
+	{ "+", act.IncreaseFontSize },
+	{ "-", act.DecreaseFontSize },
+	{ "0", act.ResetFontSize },
+
+	{ "h", act.ActivateTabRelative(-1) },
+	{ "l", act.ActivateTabRelative(1) },
+	{ "p", select_project() }, -- ALT+p (project)
+	{ "f", open_fzf_action() }, -- ALT+f
+	{ "d", open_fzf_directory() }, -- ALT+d
+	{ "i", act.ShowDebugOverlay }, -- ALT+i
 }) do
-	table.insert(config.keys, { key = v[1], mods = v[2], action = v[3] })
+	table.insert(config.keys, { mods = "ALT", key = v[1], action = v[2] })
 end
 
 table.insert(config.keys, {
