@@ -1,5 +1,41 @@
 #!/usr/bin/env bash
+handle_file() {
+    local file="$1"
 
+    if [ -L "$file" ]; then
+        # On symlink → älä tee mitään
+        echo "$file on symlink, ohitetaan"
+    elif [ -f "$file" ]; then
+        # On tavallinen tiedosto → poista
+        echo "$file on tavallinen tiedosto, poistetaan"
+        rm "$file"
+    else
+        # Ei ole olemassa
+        echo "$file ei ole olemassa, jatketaan"
+    fi
+}
+
+handle_file "$HOME/.bashrc"
+handle_file "$HOME/.bash_profile"
+handle_file "$HOME/.profile"
+
+if [ ! -d "$HOME/.local/bin" ]; then
+    echo "Luodaan hakemisto $HOME/.local/bin"
+    mkdir -p "$HOME/.local/bin"
+else
+    echo "$HOME/.local/bin on jo olemassa, ei tehdä mitään"
+
+#kieli
+fi
+if grep -qE '^en_US\.UTF-8' /etc/locale.gen; then
+    echo "en_US.UTF-8 on jo aktivoitu. Ei tehdä mitään."
+else
+    echo "Aktivoidaan en_US.UTF-8..."
+    sudo sed -i 's/^# *en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen
+    echo "Generoidaan locale..."
+    sudo locale-gen
+    echo "Valmis."
+fi
 stow -t ~/ home
 stow -t ~/.config config
 stow -t ~/.local/bin bin

@@ -7,6 +7,11 @@ return {
 			go = { "golangcilint" },
 			python = { "pylint" },
 			haskell = { "hlint" },
+			typescript = { "eslint" },
+			ts = { "eslint" },
+			tsx = { "eslint" },
+			c = { "clang_tidy" },
+			cpp = { "clang_tidy" },
 		}
 
 		vim.api.nvim_create_autocmd({ "BufWritePost" }, {

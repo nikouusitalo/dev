@@ -1,6 +1,7 @@
 
 #!/usr/bin/env bash
 set -euo pipefail
+sudo apt install nodejs npm
 
 PREFIX="$HOME/.local/npm"
 
@@ -39,5 +40,9 @@ echo "  n prefix:   ${N_PREFIX}"
 echo "  node:       $(command -v node || true)"
 echo "  node -v:    $(node -v || true)"
 echo "  npm -v:     $(npm -v || true)"
-``
+
+
+sudo apt purge -y nodejs npm
+sudo apt autoremove -y
+
 

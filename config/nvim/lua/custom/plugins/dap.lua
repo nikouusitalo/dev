@@ -8,7 +8,6 @@ return {
 		"mfussenegger/nvim-dap-python",
 	},
 	config = function()
-
 		local dap = require("dap")
 		local dapui = require("dapui")
 
@@ -101,77 +100,132 @@ return {
 			},
 		}
 
-        
-local dap = require("dap")
-dap.adapters.python = {
-  type = 'executable',
-  command = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python",
-  args = { "-m", "debugpy.adapter" },
-}
+		dap.adapters.python = {
+			type = "executable",
+			command = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python",
+			args = { "-m", "debugpy.adapter" },
+		}
 
-dap.configurations.python = {
-  {
-    type = "python",
-    request = "launch",
-    name = "Launch file",
-    program = "${file}",
-    pythonPath = function()
-      return vim.fn.exepath("python3") -- tai virtuaaliympäristön polku
-    end,
-  },
-}
-
-		-- c++/c/rust
-		dap.adapters.codelldb = {
-			type = "server",
-			port = "${port}",
-			executable = {
-				-- CHANGE THIS to your path!
-				command = os.getenv("HOME") .. "/.local/share/nvim/mason/bin/codelldb",
-				--command = os.getenv('HOME') .. '/.vscode/extensions/vadimcn.vscode-lldb-1.9.2/adapter/codelldb',
-				args = { "--port", "${port}" },
-
-				-- On windows you may have to uncomment this:
-				-- detached = false,
+		dap.configurations.python = {
+			{
+				type = "python",
+				request = "launch",
+				name = "Launch file",
+				program = "${file}",
+				pythonPath = function()
+					return vim.fn.exepath("python3") -- tai virtuaaliympäristön polku
+				end,
 			},
+		}
+		-- C/C++ adapter
+		dap.adapters.cppdbg = {
+			id = "cppdbg",
+			type = "executable",
+			command = vim.fn.stdpath("data") .. "/mason/packages/cpptools/extension/debugAdapters/bin/OpenDebugAD7",
 		}
 
 		dap.configurations.cpp = {
 			{
 				name = "Launch file",
-				type = "codelldb",
+				type = "cppdbg",
 				request = "launch",
 				program = function()
 					return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
 				end,
 				cwd = "${workspaceFolder}",
-				stopOnEntry = false,
-				terminal = "integrated",
-			},
-		}
-
-		dap.configurations.c = dap.configurations.cpp
-		-- Dap UI setup
-		-- For more information, see |:help nvim-dap-ui|
-		dapui.setup({
-			-- Set icons to characters that are more likely to work in every terminal.
-			--    Feel free to remove or use ones that you like more! :)
-			--    Don't feel like these are good choices.
-			icons = { expanded = "▾", collapsed = "▸", current_frame = "*" },
-			controls = {
-				icons = {
-					pause = "⏸",
-					play = "▶",
-					step_into = "⏎",
-					step_over = "⏭",
-					step_out = "⏮",
-					step_back = "b",
-					run_last = "▶▶",
-					terminate = "⏹",
-					disconnect = "⏏",
+				stopAtEntry = true,
+				setupCommands = {
+					{
+						description = "Enable pretty-printing for gdb",
+						text = "-enable-pretty-printing",
+						ignoreFailures = false,
+					},
 				},
 			},
-		})
+		}
+		-- js
+		for _, adapterType in ipairs({ "node", "chrome", "msedge" }) do
+			local pwaType = "pwa-" .. adapterType
+
+			if not dap.adapters[pwaType] then
+				dap.adapters[pwaType] = {
+					type = "server",
+					host = "localhost",
+					port = "${port}",
+					executable = {
+						command = "js-debug-adapter",
+						args = { "${port}" },
+					},
+				}
+			end
+
+			-- Define adapters without the "pwa-" prefix for VSCode compatibility
+			if not dap.adapters[adapterType] then
+				dap.adapters[adapterType] = function(cb, config)
+					local nativeAdapter = dap.adapters[pwaType]
+
+					config.type = pwaType
+
+					if type(nativeAdapter) == "function" then
+						nativeAdapter(cb, config)
+					else
+						cb(nativeAdapter)
+					end
+				end
+			end
+		end
+
+		local js_filetypes = { "typescript", "javascript", "typescriptreact", "javascriptreact" }
+
+		local vscode = require("dap.ext.vscode")
+		vscode.type_to_filetypes["node"] = js_filetypes
+		vscode.type_to_filetypes["pwa-node"] = js_filetypes
+
+		for _, language in ipairs(js_filetypes) do
+			if not dap.configurations[language] then
+				local runtimeExecutable = nil
+				if language:find("typescript") then
+					runtimeExecutable = vim.fn.executable("tsx") == 1 and "tsx" or "ts-node"
+				end
+				dap.configurations[language] = {
+					{
+						type = "pwa-node",
+						request = "launch",
+						name = "Launch file",
+						program = "${file}",
+						cwd = "${workspaceFolder}",
+						sourceMaps = true,
+						runtimeExecutable = runtimeExecutable,
+						skipFiles = {
+							"<node_internals>/**",
+							"node_modules/**",
+						},
+						resolveSourceMapLocations = {
+							"${workspaceFolder}/**",
+							"!**/node_modules/**",
+						},
+					},
+					{
+						type = "pwa-node",
+						request = "attach",
+						name = "Attach",
+						processId = require("dap.utils").pick_process,
+						cwd = "${workspaceFolder}",
+						sourceMaps = true,
+						runtimeExecutable = runtimeExecutable,
+						skipFiles = {
+							"<node_internals>/**",
+							"node_modules/**",
+						},
+						resolveSourceMapLocations = {
+							"${workspaceFolder}/**",
+							"!**/node_modules/**",
+						},
+					},
+				}
+			end
+		end
+		dap.configurations.c = dap.configurations.cpp
 
 		-- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
 		vim.keymap.set("n", "<F7>", dapui.toggle, { desc = "Debug: See last session result." })

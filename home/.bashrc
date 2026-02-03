@@ -1,26 +1,17 @@
-. /home/nikouu/.local/share/cht/bash_completion
+#. /home/nikouu/.local/share/cht/bash_completion
 # .bashrc
 # tab-complete
-bind 'set completion-ignore-case on'
-bind 'set show-all-if-ambiguous on'
-bind 'set menu-complete-display-prefix on'
-bind '"\t": menu-complete'
+[[ $- != *i* ]] && return
 
-# Source global definitions
 if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
 
-export N_PREFIX="$HOME/.local/npm"
-export PATH="$HOME/.local/npm/bin:$PATH"
 
-# User specific environment
-if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
-    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
-fi
-export PATH
-
-
+bind 'set completion-ignore-case on'
+bind 'set show-all-if-ambiguous on'
+bind 'set menu-complete-display-prefix on'
+bind '"\t": menu-complete'
 
 export HISTSIZE=100000
 export HISTFILESIZE=200000
@@ -37,17 +28,6 @@ goo() {
 ww(){  w3m https://lite.duckduckgo.com/lite/?q="$*"; }
 alias kk="task ghistory"
 alias arvio="task burndown.weekly"
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
-
 
 # # ex = EXtractor for all kinds of archives
 # # usage: ex <file>
@@ -79,9 +59,17 @@ ex ()
 
 ##Alise
 parse_git_branch() {
-  git branch 2>/dev/null | sed -n '/\* /s///p'
+git rev-parse --abbrev-ref HEAD 2>/dev/null
 }
 
 export PS1="-> \[\e[32m\]\$(parse_git_branch)\[\e[0m\] "
-eval "$(zoxide init bash)"
+
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
 

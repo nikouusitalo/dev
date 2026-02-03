@@ -49,6 +49,7 @@ return {
 
 				["lua_ls"] = function()
 					local lspconfig = require("lspconfig")
+
 					lspconfig.lua_ls.setup({
 						capabilities = capabilities,
 						settings = {
@@ -64,20 +65,22 @@ return {
 		})
 
 		require("mason-nvim-dap").setup({
-			ensure_installed = { "python", "cppdbg", "codelldb " }, -- lisää haluamasi DAP-adapterit
+			ensure_installed = { "python", "cppdbg", "codelldb", "js-debug-adapter" }, -- lisää haluamasi DAP-adapterit
 		})
 
 		require("mason-null-ls").setup({
-			ensure_installed = { "pylint", "black", "stylua", "isort", "clang_format" }, -- lintterit/formatteritlsp
+			ensure_installed = { "eslint_d", "pylint", "stylua", "clang_format", "sqlfluff" }, -- lintterit/formatteritlsp
 		})
 
 		local cmp_select = { behavior = cmp.SelectBehavior.Select }
-		require("luasnip.loaders.from_vscode").lazy_load()
-
+		--require("luasnip.loaders.from_vscode").lazy_load()
+		require("luasnip.loaders.from_lua").lazy_load({
+			paths = vim.fn.stdpath("config") .. "/snippets",
+		})
 		cmp.setup({
 			snippet = {
 				expand = function(args)
-					vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+					--	vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
 					require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
 					-- vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
 				end,
@@ -89,11 +92,14 @@ return {
 				["<C-Space>"] = cmp.mapping.complete(),
 			}),
 			sources = cmp.config.sources({
-				{ name = "nvim_lsp" },
-				{ name = "vsnip" }, -- For vsnip users.
+				--	{ name = "nvim_lsp" },
+				{
+					name = "nvim_lsp",
+					entry_filter = function(entry, ctx)
+						return require("cmp").lsp.CompletionItemKind.Snippet ~= entry:get_kind()
+					end,
+				},
 				{ name = "luasnip" }, -- For luasnip users.
-				-- { name = 'ultisnips' }, -- For ultisnips users.
-				-- { name = 'snippy' }, -- For snippy users.
 			}, {
 				{ name = "buffer" },
 			}),
