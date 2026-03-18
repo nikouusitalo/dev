@@ -1,4 +1,5 @@
 #ympäristömuuttujat (portable)
+alias get_idf='. $HOME/esp/esp-idf/export.sh'
 
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 
@@ -23,6 +24,7 @@ export BROWSERCLI="w3m"
 export PAGER="less"
 export LANG=fi_FI.UTF-8
 export LC_MESSAGES=en_US.UTF-8
+
 export QT_QPA_PLATFORM="wayland xcb virtualbox"
 #export XDG_CURRENT_DESKTOP=sway
 #export XDG_SESSION_DESKTOP=sway
@@ -33,3 +35,4 @@ export MOZ_ENABLE_WAYLAND=1
 export OPENER="xdg-open"
 export VIDEO="mpv"
 
+. "$HOME/.cargo/env"

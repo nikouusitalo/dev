@@ -25,7 +25,6 @@ goo() {
     IFS=+ w3m https://google.com/search?hl=en\&q="$*"
 }
 
-ww(){  w3m https://lite.duckduckgo.com/lite/?q="$*"; }
 alias kk="task ghistory"
 alias arvio="task burndown.weekly"
 
@@ -73,3 +72,4 @@ if ! shopt -oq posix; then
 fi
 
 
+. "$HOME/.cargo/env"
