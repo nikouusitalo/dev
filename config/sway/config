@@ -1,4 +1,5 @@
 include /etc/sway/config.d/*
+font pango:monospace 10
 exec wl-paste --watch cliphist store
 
 exec /usr/libexec/xdg-desktop-portal -r
@@ -26,7 +27,10 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term wezterm 
+set $term wezterm
+set $browser firefox
+set $editor_gui code
+set $pdf_reader env QT_QPA_PLATFORM=wayland sioyek
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
@@ -34,7 +38,15 @@ set $term wezterm
 
 set $menu rofi -show drun
 include /etc/sway/config-vars.d/*
-bindsym $mod+Shift+w exec bash -lc 'q=$(rofi -dmenu -i -p "Web search"); [ -n "$q" ] && xdg-open "https://duckduckgo.com/?q=$(printf %s "$q" | sed "s/ /+/g")"'
+set $ws1 "1:code"
+set $ws2 "2:web"
+set $ws3 "3:docs"
+set $ws4 "4:pdf"
+set $ws5 "5:chat"
+
+bindsym $mod+Shift+w workspace $ws2, exec bash -lc 'q=$(rofi -dmenu -i -p "Web search"); [ -n "$q" ] && firefox "https://duckduckgo.com/?q=$(printf "%s" "$q" | sed "s/[[:space:]]\\+/+/g")"'
+bindsym $mod+Shift+d workspace $ws3, exec bash -lc 'q=$(rofi -dmenu -i -p "Docs / code search"); [ -n "$q" ] && firefox "https://duckduckgo.com/?q=$(printf "%s" "$q docs github stackoverflow" | sed "s/[[:space:]]\\+/+/g")"'
+bindsym $mod+Shift+p workspace $ws4, exec bash -lc 'pdf=$(find "$HOME" -type f \\( -iname "*.pdf" -o -iname "*.djvu" \\) 2>/dev/null | rofi -dmenu -i -p "Open PDF"); [ -z "$pdf" ] && exit 0; env QT_QPA_PLATFORM=wayland sioyek "$pdf" || evince "$pdf"'
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
@@ -85,6 +97,11 @@ bindsym --locked XF86AudioPrev exec playerctl previous
 bindsym --locked XF86AudioPlay exec playerctl play-pause
 bindsym --locked XF86AudioNext exec playerctl next
 
+focus_follows_mouse no
+mouse_warping none
+default_orientation horizontal
+workspace_auto_back_and_forth yes
+
 seat seat0 {
     fallback true
     hide_cursor 3000
@@ -95,7 +112,10 @@ seat seat0 {
 # Basics:
 #
     # Start a terminal
-    bindsym $mod+Return exec $term
+    bindsym $mod+Return workspace $ws1, exec $term
+    bindsym $mod+Shift+Return workspace $ws1, exec $editor_gui
+    bindsym $mod+i workspace $ws2, exec $browser
+    bindsym $mod+d workspace $ws4, exec $pdf_reader
 
     # Kill focused window
     bindsym $mod+n kill
@@ -155,8 +175,24 @@ bindsym $mod+Shift+Right move right
 # Käynnistyksessä avaa Chrome teams-profiililla
 
 workspace 6 output eDP-1
+workspace $ws1 output eDP-1
+workspace $ws2 output eDP-1
+workspace $ws3 output eDP-1
+workspace $ws4 output eDP-1
+workspace $ws5 output eDP-1
+
+assign [app_id="code"] $ws1
+assign [class="Code"] $ws1
+assign [app_id="sioyek"] $ws4
+assign [app_id="org.gnome.Evince"] $ws4
+assign [class="Evince"] $ws4
 
     # Switch to workspace
+    bindsym $mod+1 workspace $ws1
+    bindsym $mod+2 workspace $ws2
+    bindsym $mod+3 workspace $ws3
+    bindsym $mod+4 workspace $ws4
+    bindsym $mod+5 workspace $ws5
     bindsym $mod+6 workspace number 6
     bindsym $mod+7 workspace number 7
     bindsym $mod+8 workspace number 8
@@ -164,8 +200,14 @@ workspace 6 output eDP-1
     bindsym $mod+0 workspace number 10
     bindsym $mod+plus workspace number 11
     bindsym $mod+dead_acute workspace number 12
+    bindsym $mod+Tab workspace back_and_forth
     # Move focused container to workspace
    
+    bindsym $mod+Shift+1 move container to workspace $ws1
+    bindsym $mod+Shift+2 move container to workspace $ws2
+    bindsym $mod+Shift+3 move container to workspace $ws3
+    bindsym $mod+Shift+4 move container to workspace $ws4
+    bindsym $mod+Shift+5 move container to workspace $ws5
     bindsym $mod+Shift+6 move container to workspace number 6
     bindsym $mod+Shift+7 move container to workspace number 7
     bindsym $mod+Shift+8 move container to workspace number 8
@@ -193,7 +235,7 @@ workspace 6 output eDP-1
     bindsym $mod+f fullscreen
 
     # Toggle the current focus between tiling and floating mode
-bindsym $mod+Shift+Return floating toggle
+    bindsym $mod+Shift+f floating toggle
 
     # Swap focus between the tiling area and the floating area
     bindsym $mod+space focus mode_toggle
@@ -270,15 +312,15 @@ client.urgent            $col_text_dark         $col_urgent            $col_text
 
 # Titlebar
 titlebar_padding 1
-title_align center
+title_align left
 titlebar_border_thickness 1
 
 # Borders
-default_border pixel 1
+default_border pixel 2
+default_floating_border pixel 2
 smart_borders on
 #exec --no-startup-id foot -a music ncmpcpp
-exec --no-startup-id swaymsg 'workspace 8; exec wezterm'
+exec --no-startup-id swaymsg 'workspace 1:code; exec wezterm'
 for_window [app_id="wwsearch"] floating enable
 bindsym $mod+Shift+Space exec cliphist list | wofi -S dmenu | cliphist decode | wl-copy
-
-bindsym $mod+o exec ~/.local/bin/ww.sh "$(rofi -dmenu -p 'Google haku:')"
+bindsym $mod+o workspace $ws2, exec bash -lc 'q=$(rofi -dmenu -i -p "Open URL or search"); [ -z "$q" ] && exit 0; case "$q" in http://*|https://*) firefox "$q" ;; *) firefox "https://duckduckgo.com/?q=$(printf "%s" "$q" | sed "s/[[:space:]]\\+/+/g")" ;; esac'
