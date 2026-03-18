@@ -174,12 +174,12 @@ bindsym $mod+Shift+Right move right
 #exec google-chrome --new-window --profile-directory="teams" https://teams.microsoft.com/v2/
 # Käynnistyksessä avaa Chrome teams-profiililla
 
-workspace 6 output eDP-1
-workspace $ws1 output eDP-1
-workspace $ws2 output eDP-1
-workspace $ws3 output eDP-1
-workspace $ws4 output eDP-1
-workspace $ws5 output eDP-1
+workspace 6 output HDMI-A-1 DP-1
+workspace $ws1 output HDMI-A-1 DP-1
+workspace $ws2 output HDMI-A-1 DP-1
+workspace $ws3 output HDMI-A-1 DP-1
+workspace $ws4 output HDMI-A-1 DP-1
+workspace $ws5 output HDMI-A-1 DP-1
 
 assign [app_id="code"] $ws1
 assign [class="Code"] $ws1
