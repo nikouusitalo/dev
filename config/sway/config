@@ -29,6 +29,7 @@ set $right l
 # Your preferred terminal emulator
 set $term wezterm
 set $browser firefox
+set $calendar_url https://calendar.google.com/
 set $editor_gui code
 set $pdf_reader env QT_QPA_PLATFORM=wayland sioyek
 # Your preferred application launcher
@@ -85,6 +86,8 @@ bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
 bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+bindsym $mod+Shift+s exec grim -g "$(slurp)" - | wl-copy
+bindsym $mod+Ctrl+s exec bash -lc 'dir="$HOME/Pictures/Screenshots"; mkdir -p "$dir"; file="$dir/$(date +%Y-%m-%d_%H-%M-%S).png"; grim -g "$(slurp)" "$file"'
 #bindsym $mod+g exec ~/.config/scripts/open_links.sh
 #bindsym $mod+o exec sh -c 'wtype "$(grep -v "^#" ~/.local/share/url | wofi --dmenu -l 50 | cut -d\  -f1)"'
 
@@ -116,6 +119,7 @@ seat seat0 {
     bindsym $mod+Shift+Return workspace $ws1, exec $editor_gui
     bindsym $mod+i workspace $ws2, exec $browser
     bindsym $mod+d workspace $ws4, exec $pdf_reader
+    bindsym $mod+c workspace $ws5, exec $browser --new-window $calendar_url
 
     # Kill focused window
     bindsym $mod+n kill
