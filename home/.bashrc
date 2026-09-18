@@ -27,7 +27,10 @@ goo() {
 
 alias kk="task ghistory"
 alias arvio="task burndown.weekly"
-
+amk() {
+    git config user.name "Niko Uusitalo"
+    git config user.email "niko.uusitalo@edu.turkuamk.fi"
+}
 # # ex = EXtractor for all kinds of archives
 # # usage: ex <file>
 ex ()
@@ -72,4 +75,3 @@ if ! shopt -oq posix; then
 fi
 
 
-. "$HOME/.cargo/env"

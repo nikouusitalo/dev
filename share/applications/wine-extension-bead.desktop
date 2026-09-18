@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=SPICE Simulator w/ Schematic Capture
+MimeType=application/bead;
+Exec=env "WINEPREFIX=/home/nikouu/.wine" wine start /ProgIDOpen "Analog Devices Inc..LTspice_3" %f
+NoDisplay=true
+StartupNotify=true
+Icon=E991_LTspice.0

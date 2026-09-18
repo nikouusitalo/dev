@@ -25,7 +25,7 @@ export PAGER="less"
 export LANG=fi_FI.UTF-8
 export LC_MESSAGES=en_US.UTF-8
 
-export QT_QPA_PLATFORM="wayland xcb virtualbox"
+#export QT_QPA_PLATFORM="wayland xcb virtualbox"
 #export XDG_CURRENT_DESKTOP=sway
 #export XDG_SESSION_DESKTOP=sway
 #export XDG_CURRENT_SESION_TYPE=wayland
@@ -34,5 +34,3 @@ export MOZ_ENABLE_WAYLAND=1
 #export WM="sway"
 export OPENER="xdg-open"
 export VIDEO="mpv"
-
-. "$HOME/.cargo/env"

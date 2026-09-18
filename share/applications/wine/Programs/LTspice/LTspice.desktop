@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=LTspice
+Exec=env "WINEPREFIX=/home/nikouu/.wine" wine "C:\\\\users\\\\nikouu\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\LTspice\\\\LTspice.lnk"
+Type=Application
+StartupNotify=true
+Path=/home/nikouu/.wine/drive_c/Program Files/ADI/LTspice/
+Icon=EBAE_LTspice_1.0
+StartupWMClass=ltspice.exe
