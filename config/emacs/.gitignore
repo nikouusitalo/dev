@@ -1,0 +1,36 @@
+# Downloaded packages and generated builds (keep optional version lockfiles).
+/straight/*
+!/straight/versions/
+/.cache/
+/.local/
+/eln-cache/
+/elpa/
+/tree-sitter/
+
+# Personal state, browsing history and account settings.
+/auto-save-list/
+/url/
+/.lsp-session*
+/bookmarks
+/history
+/nov-places
+/places
+/projects
+/recentf
+/tramp
+/custom-vars.el
+/mail-accounts.el
+/authinfo*
+/.authinfo*
+
+# Editor and LaTeX build artifacts.
+*~
+\#*\#
+.#*
+*.elc
+*.eln
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
