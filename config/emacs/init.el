@@ -489,6 +489,17 @@
               (t '(emms-player-mpv)))))
 
 
+;;; CHEAT SHEETS
+(use-package cheat-sh
+  :ensure nil
+  :straight t
+  :commands (cheat-sh cheat-sh-search cheat-sh-search-topic)
+  :config
+  (setq cheat-sh-url "https://cheat.sh/%s?T")
+  (with-eval-after-load 'evil
+    (evil-set-initial-state 'cheat-sh-mode 'normal)))
+
+
 ;;; RSS / ATOM
 (use-package elfeed
   :ensure nil
@@ -576,7 +587,7 @@
    ("C-x v D" . vc-root-diff)        ;; Show differences for the entire repository.
    ("C-x v v" . vc-next-action))     ;; Perform the next version control action.
   :config
-  ;; Better colors for <leader> g b  (blame file)
+  ;; Better colors for <leader> v g b  (blame file)
   (setq vc-annotate-color-map
         '((20 . "#f5e0dc")
           (40 . "#f2cdcd")
@@ -697,6 +708,44 @@
   (org-agenda-time-leading-zero t))
 
 
+;;; LOCAL PROJECTS
+(use-package project
+  :ensure nil
+  :demand t
+  :preface
+  (defun ek/project-under-code (directory)
+    "Recognize direct children of ~/code as projects, including non-Git folders.
+Preserve more specific version-controlled projects inside those folders."
+    (unless (file-remote-p directory)
+      (let* ((base (file-name-as-directory (expand-file-name "~/code/")))
+             (relative (file-relative-name (expand-file-name directory) base))
+             (first (car (split-string relative "/" t))))
+        (when (and first
+                   (not (member first '("." "..")))
+                   (not (file-name-absolute-p relative)))
+          (let* ((root (file-name-as-directory (expand-file-name first base)))
+                 (vc-project (project-try-vc directory)))
+            (when (file-directory-p root)
+              (if (and vc-project
+                       (or (file-equal-p (project-root vc-project) root)
+                           (file-in-directory-p (project-root vc-project) root)))
+                  vc-project
+                (cons 'transient root))))))))
+
+  (defun ek/refresh-code-projects ()
+    "Add current direct subdirectories of ~/code to the project chooser."
+    (interactive)
+    (let ((base (expand-file-name "~/code/")))
+      (when (file-directory-p base)
+        (dolist (directory (directory-files base t "\\`[^.]"))
+          (when (file-directory-p directory)
+            (when-let ((project (ek/project-under-code directory)))
+              (project-remember-project project)))))))
+  :config
+  (add-hook 'project-find-functions #'ek/project-under-code)
+  (ek/refresh-code-projects))
+
+
 ;;; WHICH-KEY
 ;; `which-key' is an Emacs package that displays available keybindings in a
 ;; popup window whenever you partially type a key sequence. This is particularly
@@ -791,6 +840,66 @@
   :straight t
   :defer t
   :preface
+  (defun ek/find-files-no-ignore ()
+    "Find files with fd, including files excluded by ignore rules."
+    (interactive)
+    (require 'consult)
+    (let ((consult-fd-args
+           (append (consult--build-args consult-fd-args) '("--no-ignore"))))
+      (consult-fd)))
+
+  (defun ek/search-environment ()
+    "Choose an environment variable and display its value."
+    (interactive)
+    (let* ((names (mapcar (lambda (entry) (car (split-string entry "=")))
+                          process-environment))
+           (name (completing-read "Environment variable: " names nil t)))
+      (with-help-window "*Environment variable*"
+        (princ (format "%s=%s" name (getenv name))))))
+
+  (defun ek/search-menu ()
+    "Choose a search command by its purpose."
+    (interactive)
+    (let* ((commands '(("Files" . consult-fd)
+                       ("Files including ignored" . ek/find-files-no-ignore)
+                       ("Text in project" . consult-ripgrep)
+                       ("Buffers" . consult-buffer)
+                       ("Recent files" . consult-recent-file)
+                       ("Current buffer lines" . consult-line)
+                       ("Diagnostics" . consult-flymake)
+                       ("References (LSP)" . lsp-find-references)
+                       ("Type definition (LSP)" . lsp-find-type-definition)
+                       ("Manuals" . consult-info)
+                       ("Man pages" . consult-man)
+                       ("Key bindings" . embark-bindings)
+                       ("Environment" . ek/search-environment)
+                       ("Git commits" . magit-log-all)))
+           (choice (completing-read "Search: " commands nil t)))
+      (call-interactively (cdr (assoc choice commands)))))
+
+  (defun ek/search-word-at-point (&optional big-word)
+    "Search project files literally for the word at point.
+With BIG-WORD, use Evil's whitespace-delimited WORD instead."
+    (interactive)
+    (require 'evil)
+    (require 'consult)
+    (let* ((text (thing-at-point (if big-word 'evil-WORD 'evil-word) t))
+           (project (project-current nil))
+           (directory (if project (project-root project) default-directory))
+           (consult-ripgrep-args
+            (append (consult--build-args consult-ripgrep-args) '("--fixed-strings")))
+           (consult-async-min-input 1)
+           ;; Keep punctuation such as # literal instead of splitting the query.
+           (consult-async-split-style 'none))
+      (unless (and text (string-match-p "[^[:space:]]" text))
+        (user-error "No word at point"))
+      (consult-ripgrep directory text)))
+
+  (defun ek/search-WORD-at-point ()
+    "Search project files for the whitespace-delimited WORD at point."
+    (interactive)
+    (ek/search-word-at-point t))
+
   (defcustom ek/book-search-directory (expand-file-name "~/Asiakirjat/books/")
     "Directory searched by `ek/find-books'."
     :type 'directory :group 'files)
@@ -1335,22 +1444,31 @@ Set this explicitly when using multiple SDK versions or a different location."
   (evil-define-key 'insert 'global (kbd "C-SPC") #'completion-at-point)
   (evil-define-key 'insert 'global (kbd "C-@") #'completion-at-point)
 
-  ;; Keybindings for searching and finding files.
-  (evil-define-key 'normal 'global (kbd "<leader> s f") 'consult-fd)
-  (evil-define-key 'normal 'global (kbd "<leader> s b") #'ek/find-books)
-  (evil-define-key 'normal 'global (kbd "<leader> s g") 'consult-ripgrep)
-  (evil-define-key 'normal 'global (kbd "<leader> s G") 'consult-git-grep)
-  (evil-define-key 'normal 'global (kbd "<leader> s r") 'consult-ripgrep)
-  (evil-define-key 'normal 'global (kbd "<leader> s h") 'consult-info)
-  (evil-define-key 'normal 'global (kbd "<leader> /") 'consult-line)
+  ;; Search layout: frequent searches directly under Space, others under s.
+  (evil-define-key 'normal 'global
+    (kbd "<leader> f") #'consult-fd
+    (kbd "<leader> g") #'consult-ripgrep
+    (kbd "<leader> G") #'magit-log-all
+    (kbd "<leader> s g") #'ek/find-files-no-ignore
+    (kbd "<leader> s b") #'consult-buffer
+    (kbd "<leader> s i") #'ek/search-word-at-point
+    (kbd "<leader> s I") #'ek/search-WORD-at-point
+    (kbd "<leader> s o") #'consult-recent-file
+    (kbd "<leader> s h") #'consult-info
+    (kbd "<leader> s m") #'consult-man
+    (kbd "<leader> s d") #'consult-flymake
+    (kbd "<leader> s s") #'consult-line
+    (kbd "<leader> s t") #'ek/search-menu
+    (kbd "<leader> s k") #'embark-bindings
+    (kbd "<leader> s e") #'ek/search-environment)
+  (evil-define-key 'normal 'global (kbd "<leader> s c") #'cheat-sh)
 
   ;; Open EWW's prompt for a web search or URL.
   (evil-define-key 'normal 'global (kbd "<leader> w w") #'eww)
 
   ;; Flymake navigation
-  (evil-define-key 'normal 'global (kbd "<leader> x x") 'consult-flymake);; Gives you something like `trouble.nvim'
-  (evil-define-key 'normal 'global (kbd "] d") 'flymake-goto-next-error) ;; Go to next Flymake error
-  (evil-define-key 'normal 'global (kbd "[ d") 'flymake-goto-prev-error) ;; Go to previous Flymake error
+  (evil-define-key 'normal 'global (kbd "<leader> e n") #'flymake-goto-next-error)
+  (evil-define-key 'normal 'global (kbd "<leader> e p") #'flymake-goto-prev-error)
 
   ;; Dired commands for file management
   (evil-define-key 'normal 'global (kbd "<leader> x d") 'dired)
@@ -1376,6 +1494,8 @@ Set this explicitly when using multiple SDK versions or a different location."
   (evil-define-key 'normal 'global (kbd "<leader> o r") #'elfeed)
   (evil-define-key 'normal 'global (kbd "<leader> o s") #'ek/music)
 
+  (evil-define-key 'normal 'global (kbd "<leader> o b") #'ek/find-books)
+
   ;; Tabs preserve separate window layouts.
   (evil-define-key 'normal 'global
     (kbd "<leader> t n") #'tab-new
@@ -1384,12 +1504,12 @@ Set this explicitly when using multiple SDK versions or a different location."
     (kbd "<leader> t c") #'tab-close
     (kbd "<leader> t r") #'tab-rename)
 
-  ;; Magit keybindings for Git integration
-  (evil-define-key 'normal 'global (kbd "<leader> g g") 'magit-status)      ;; Open Magit status
-  (evil-define-key 'normal 'global (kbd "<leader> g l") 'magit-log-current) ;; Show current log
-  (evil-define-key 'normal 'global (kbd "<leader> g d") 'magit-diff-buffer-file) ;; Show diff for the current file
-  (evil-define-key 'normal 'global (kbd "<leader> g D") 'diff-hl-show-hunk) ;; Show diff for a hunk
-  (evil-define-key 'normal 'global (kbd "<leader> g b") 'vc-annotate)       ;; Annotate buffer with version control info
+  ;; Git operations moved to v g because Space g now searches text.
+  (evil-define-key 'normal 'global (kbd "<leader> v g g") 'magit-status)      ;; Open Magit status
+  (evil-define-key 'normal 'global (kbd "<leader> v g l") 'magit-log-current) ;; Show current log
+  (evil-define-key 'normal 'global (kbd "<leader> v g d") 'magit-diff-buffer-file) ;; Show diff for the current file
+  (evil-define-key 'normal 'global (kbd "<leader> v g D") 'diff-hl-show-hunk) ;; Show diff for a hunk
+  (evil-define-key 'normal 'global (kbd "<leader> v g b") 'vc-annotate)       ;; Annotate buffer with version control info
 
   ;; Buffer management keybindings
   (evil-define-key 'normal 'global (kbd "] b") 'switch-to-next-buffer) ;; Switch to next buffer
@@ -1406,7 +1526,7 @@ Set this explicitly when using multiple SDK versions or a different location."
   ;; Project management keybindings
   (evil-define-key 'normal 'global (kbd "<leader> p b") 'consult-project-buffer) ;; Consult project buffer
   (evil-define-key 'normal 'global (kbd "<leader> p p") 'project-switch-project) ;; Switch project
-  (evil-define-key 'normal 'global (kbd "<leader> p f") 'project-find-file) ;; Find file in project
+  (evil-define-key 'normal 'global (kbd "C-p") #'project-find-file)
   (evil-define-key 'normal 'global (kbd "<leader> p g") 'project-find-regexp) ;; Find regexp in project
   (evil-define-key 'normal 'global (kbd "<leader> p k") 'project-kill-buffers) ;; Kill project buffers
   (evil-define-key 'normal 'global (kbd "<leader> p D") 'project-dired) ;; Dired for project
@@ -1441,12 +1561,16 @@ Set this explicitly when using multiple SDK versions or a different location."
 
   ;; LSP commands keybindings
   (evil-define-key 'normal lsp-mode-map
-                   ;; (kbd "gd") 'lsp-find-definition                ;; evil-collection already provides gd
-                   (kbd "gr") 'lsp-find-references                   ;; Finds LSP references
-                   (kbd "<leader> c a") 'lsp-execute-code-action     ;; Execute code actions
-                   (kbd "<leader> r n") 'lsp-rename                  ;; Rename symbol
+                   (kbd "gd") 'lsp-find-definition
+                   (kbd "<leader> s T") #'lsp-find-type-definition
+                   (kbd "<leader> w s") 'xref-find-apropos          ;; LSP workspace symbol search
+                   (kbd "<leader> s r") 'lsp-find-references
+                   (kbd "<leader> s a") 'lsp-execute-code-action     ;; Execute code actions
+                   (kbd "<leader> v r n") 'lsp-rename                ;; Rename symbol
                    (kbd "gI") 'lsp-find-implementation               ;; Find implementation
                    (kbd "<leader> l f") 'lsp-format-buffer)          ;; Format buffer via lsp
+
+  (evil-define-key 'insert lsp-mode-map (kbd "C-h") #'lsp-signature-activate)
 
 
   (defun ek/lsp-describe-and-jump ()
@@ -1460,7 +1584,7 @@ Set this explicitly when using multiple SDK versions or a different location."
   ;; Emacs 31 finaly brings us support for 'floating windows' (a.k.a. "child frames")
   ;; to terminal Emacs. If you're still using 30, docs will be shown in a buffer at the
   ;; inferior part of your frame.
-  (evil-define-key 'normal 'global (kbd "K")
+  (evil-define-key 'normal lsp-mode-map (kbd "K")
     (if (>= emacs-major-version 31)
         #'eldoc-box-help-at-point
         #'ek/lsp-describe-and-jump))
