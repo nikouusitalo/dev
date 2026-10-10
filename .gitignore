@@ -1,0 +1,7 @@
+/config/emacs/eln-cache/
+/config/emacs/elpa/
+
+# Editor temporary files.
+*~
+\#*\#
+.#*

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build the latest stable GNU Emacs tag from GitHub on Fedora.
+# Build the latest stable GNU Emacs release from GNU FTP on Fedora.
 set -euo pipefail
 
 usage() {
@@ -11,7 +11,7 @@ Käyttö: install-latest-emacs.sh [--install-deps] [--check]
   --help          Näytä tämä ohje.
 
 Asennus: ~/.local/opt/emacs-VERSIO
-Lähde: https://github.com/emacs-mirror/emacs/tags (vain vakaat julkaisut)
+Lähde: https://ftp.gnu.org/gnu/emacs/ (vain vakaat julkaisut)
 Käynnistys: ~/.local/bin/emacs-latest (myös emacsclient-latest)
 JOBS=4 säätää rinnakkaisten käännöstöiden määrää (oletus: 2).
 Nykyinen Emacs ja sen konfiguraatio säilyvät ennallaan.
@@ -40,26 +40,18 @@ require_fedora() {
     [[ "$ID" == fedora ]] || { echo 'Riippuvuuksien asennus tukee vain Fedoraa.' >&2; exit 1; }
 }
 
-if ! command -v git >/dev/null; then
-    if "$install_deps" && ! "$check"; then
-        require_fedora
-        sudo dnf install git
-    else
-        echo 'Asenna ensin git: sudo dnf install git' >&2
-        exit 1
-    fi
-fi
+command -v curl >/dev/null || { echo 'Asenna ensin curl: sudo dnf install curl' >&2; exit 1; }
+download() {
+    curl --fail --location --retry 3 --connect-timeout 30 --max-time 600 \
+        --proto '=https' --proto-redir '=https' "$@"
+}
 
-repository=https://github.com/emacs-mirror/emacs.git
-# Query every tag, independently of GitHub's HTML pagination or tag dates.
-listing=$(GIT_TERMINAL_PROMPT=0 git -c http.connectTimeout=30 \
-    -c http.lowSpeedLimit=1 -c http.lowSpeedTime=60 \
-    ls-remote --tags --refs "$repository" 'emacs-*')
-# Exclude RC names, x.0 development tags and .90+ pretest components.
+base=https://ftp.gnu.org/gnu/emacs
+listing=$(download --silent --show-error "$base/")
+# Only stable numbered releases; exclude development and .90+ pretest versions.
 version=$(printf '%s\n' "$listing" |
-    awk '$2 ~ /^refs\/tags\/emacs-[0-9]+\.[0-9]+(\.[0-9]+)?$/ {
-        sub(/^refs\/tags\/emacs-/, "", $2); print $2
-    }' |
+    grep -oE 'emacs-[0-9]+\.[0-9]+(\.[0-9]+)?\.tar\.xz' |
+    sed -E 's/^emacs-//; s/\.tar\.xz$//' |
     awk -F. '$2 > 0 && $2 < 90 && (NF == 2 || $3 < 90)' |
     sort -Vu | tail -n 1)
 [[ -n "$version" ]] || { echo 'Julkaisuversion hakeminen epäonnistui.' >&2; exit 1; }
@@ -79,13 +71,13 @@ done
 if [[ ! -f "$prefix/.installation-complete" ]]; then
     if "$install_deps"; then
         require_fedora
-        sudo dnf install git autoconf gcc gcc-c++ make pkgconf-pkg-config texinfo \
+        sudo dnf install curl xz gnupg2 gcc gcc-c++ make pkgconf-pkg-config texinfo \
             gtk3-devel gnutls-devel ncurses-devel libgccjit-devel \
             libtree-sitter-devel libxml2-devel libXpm-devel libjpeg-turbo-devel \
             libpng-devel giflib-devel libtiff-devel librsvg2-devel \
             sqlite-devel gmp-devel zlib-devel
     fi
-    for tool in git autoconf gcc make makeinfo pkg-config; do
+    for tool in curl tar xz gpg gcc make makeinfo pkg-config; do
         command -v "$tool" >/dev/null || {
             printf 'Puuttuva työkalu: %s. Aja --install-deps-valinnalla.\n' "$tool" >&2
             exit 1
@@ -95,10 +87,15 @@ if [[ ! -f "$prefix/.installation-complete" ]]; then
     [[ "$jobs" =~ ^[1-9][0-9]*$ ]] || { echo 'JOBS-arvon tulee olla positiivinen kokonaisluku.' >&2; exit 1; }
     work_dir=$(mktemp -d "${TMPDIR:-/tmp}/emacs-build.XXXXXXXX")
     trap 'rm -rf -- "$work_dir"' EXIT
-    GIT_TERMINAL_PROMPT=0 git clone --depth 1 --single-branch \
-        --branch "emacs-$version" "$repository" "$work_dir/emacs"
-    cd "$work_dir/emacs"
-    ./autogen.sh
+    archive="emacs-$version.tar.xz"
+    download --output "$work_dir/$archive" "$base/$archive"
+    download --output "$work_dir/$archive.sig" "$base/$archive.sig"
+    download --output "$work_dir/gnu-keyring.gpg" https://ftp.gnu.org/gnu/gnu-keyring.gpg
+    mkdir -m 700 "$work_dir/gnupg"
+    gpg --batch --homedir "$work_dir/gnupg" --import "$work_dir/gnu-keyring.gpg"
+    gpg --batch --homedir "$work_dir/gnupg" --verify "$work_dir/$archive.sig" "$work_dir/$archive"
+    tar -xJf "$work_dir/$archive" -C "$work_dir"
+    cd "$work_dir/emacs-$version"
     ./configure --prefix="$prefix" --with-pgtk --with-native-compilation \
         --with-tree-sitter --with-gnutls
     make -j "$jobs"
@@ -112,4 +109,27 @@ fi
 mkdir -p "$bin_dir"
 ln -sfnT "$prefix/bin/emacs" "$bin_dir/emacs-latest"
 ln -sfnT "$prefix/bin/emacsclient" "$bin_dir/emacsclient-latest"
+data_dir=${XDG_DATA_HOME:-"$HOME/.local/share"}
+mkdir -p "$data_dir/applications" "$data_dir/icons/hicolor/scalable/apps"
+cp "$prefix/share/icons/hicolor/scalable/apps/emacs.svg" \
+    "$data_dir/icons/hicolor/scalable/apps/emacs-latest.svg"
+cat > "$data_dir/applications/emacs-latest.desktop" <<EOF
+[Desktop Entry]
+Name=Emacs
+GenericName=Text Editor
+Comment=Edit text with GNU Emacs
+Exec="$bin_dir/emacs-latest" %F
+TryExec=$bin_dir/emacs-latest
+Icon=emacs-latest
+Type=Application
+Terminal=false
+Categories=Development;TextEditor;
+StartupNotify=true
+StartupWMClass=Emacs
+MimeType=text/plain;
+EOF
+if command -v kbuildsycoca6 >/dev/null; then
+    kbuildsycoca6 --noincremental || echo 'KDE-valikkovälimuistin päivitys epäonnistui.' >&2
+fi
+
 printf '\nValmis. Käynnistä: %s/emacs-latest\n' "$bin_dir"

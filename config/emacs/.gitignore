@@ -34,3 +34,7 @@
 *.out
 *.toc
 *.synctex.gz
+
+# Emacs project cache and shell history.
+/projects.eld
+/eshell/history
