@@ -98,4 +98,6 @@
   :ensure t
   :config
   (setq empv-audio-dir "~/Videot"
-        empv-video-dir "~/Videot"))
+        empv-video-dir "~/Videot"
+        empv-invidious-instance "https://invidious.f5.si/api/v1")
+  (setq empv-mpv-args (remove "--no-video" empv-mpv-args)))
