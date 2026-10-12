@@ -54,11 +54,18 @@
     "x"   #'execute-extended-command
     "f f" #'find-file
     "b b" #'switch-to-buffer
+    "d d" #'devdocs-lookup
+    "d i" #'devdocs-install
     "r"   (lambda ()
             (interactive)
             (load user-init-file))))
 
 (global-set-key (kbd "C-SPC") #'completion-at-point)
+(use-package devdocs
+  :ensure t
+  :commands (devdocs-install devdocs-lookup)
+  :bind ("C-h D" . devdocs-lookup))
+
 (use-package project
   :ensure nil
   :config
