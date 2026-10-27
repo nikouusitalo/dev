@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: While loop
+# key: while
+# group: VHDL
+# --
+while ${1} loop
+	${2}
+end loop;

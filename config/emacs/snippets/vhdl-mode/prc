@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: Clocked process
+# key: prc
+# group: VHDL
+# --
+process (${1:clk})
+begin
+	if rising_edge ($1) then
+		${2}
+	end if;
+end process;

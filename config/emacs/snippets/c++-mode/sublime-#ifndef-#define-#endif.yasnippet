@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: Sublime: #ifndef … #define … #endif
+# key: def
+# group: Sublime
+# uuid: sublime-C++-#ifndef-#define-#endif
+# --
+#ifndef ${1:$(car (split-string yas-text))}
+#define ${1:SYMBOL} ${2:value}
+#endif

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Signal unsigned
+# key: un
+# group: VHDL
+# --
+signal ${1} : unsigned (${2} downto 0);

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Sublime: fprintf …
+# key: fprintf
+# group: Sublime
+# uuid: sublime-C++-fprintf
+# --
+fprintf(${1:stderr}, "${2:%s}\\n"${2:$(if (string-match-p "%" (replace-regexp-in-string "%%" "" yas-text)) ", " ");")}$3${2:$(if (string-match-p "%" (replace-regexp-in-string "%%" "" yas-text)) ");" "")}

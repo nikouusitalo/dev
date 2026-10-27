@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Sublime: #include "…"
+# key: inc
+# group: Sublime
+# uuid: sublime-C++-#include-(inc)
+# condition: (not (save-excursion (skip-chars-backward "A-Za-z") (looking-back "^[ \t]*#[ \t]*" (line-beginning-position))))
+# --
+#include "${1:`(concat (if buffer-file-name (file-name-base buffer-file-name) "file") ".h")`}"

@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: Sublime: Section
+# key: \sec
+# group: Sublime
+# uuid: sublime-LaTeX-section-..-(section)
+# --
+\section{${1:section name}} % (fold)
+\label{sec:${2:${1:$(downcase (replace-regexp-in-string "[^[:alnum:]_]+" "_" yas-text))}}}
+${0:`(or yas-selected-text "")`}
+% section $2 (end)

@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: Architecture
+# key: arc
+# group: VHDL
+# --
+architecture ${1:behav} of ${2:`(if buffer-file-name (file-name-base buffer-file-name) "entity_name")`} is
+
+	${3}
+
+begin
+
+	$0
+
+end $1;

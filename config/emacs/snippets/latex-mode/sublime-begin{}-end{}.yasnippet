@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: Sublime: \begin{}…\end{}
+# key: \begin
+# group: Sublime
+# uuid: sublime-LaTeX-begin{}-end{}
+# --
+\begin{${1:env}}
+	${1:$(if (member yas-text '("enumerate" "itemize" "list" "description")) "\\item " "")}$0
+\end{$1}

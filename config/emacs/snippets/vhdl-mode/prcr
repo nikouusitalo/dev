@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: Clocked process with asynchronous reset
+# key: prcr
+# group: VHDL
+# --
+process (${1:clk}, ${2:nrst})
+begin
+	if ($2 = '${3:0}') then
+		${4}
+	elsif rising_edge($1) then
+		${5}
+	end if;
+end process;

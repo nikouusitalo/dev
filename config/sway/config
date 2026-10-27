@@ -31,7 +31,7 @@ set $term wezterm
 set $browser firefox
 set $calendar_url https://calendar.google.com/
 set $editor_gui code
-set $pdf_reader env QT_QPA_PLATFORM=wayland sioyek
+set $pdf_reader emacs
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
@@ -47,7 +47,7 @@ set $ws5 "12:chat"
 
 bindsym $mod+Shift+w workspace $ws2, exec bash -lc 'q=$(rofi -dmenu -i -p "Web search"); [ -n "$q" ] && firefox "https://duckduckgo.com/?q=$(printf "%s" "$q" | sed "s/[[:space:]]\\+/+/g")"'
 bindsym $mod+Shift+d workspace $ws3, exec bash -lc 'q=$(rofi -dmenu -i -p "Docs / code search"); [ -n "$q" ] && firefox "https://duckduckgo.com/?q=$(printf "%s" "$q docs github stackoverflow" | sed "s/[[:space:]]\\+/+/g")"'
-bindsym $mod+Shift+p workspace $ws4, exec bash -lc 'pdf=$(find "$HOME" -type f \\( -iname "*.pdf" -o -iname "*.djvu" \\) 2>/dev/null | rofi -dmenu -i -p "Open PDF"); [ -z "$pdf" ] && exit 0; env QT_QPA_PLATFORM=wayland sioyek "$pdf" || evince "$pdf"'
+bindsym $mod+Shift+p workspace $ws4, exec bash -lc 'pdf=$(find "$HOME" -type f -iname "*.pdf" 2>/dev/null | rofi -dmenu -i -p "Open PDF"); [ -z "$pdf" ] && exit 0; emacs "$pdf"'
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)

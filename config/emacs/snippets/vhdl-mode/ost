@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Output std_logic
+# key: ost
+# group: VHDL
+# --
+${1} : out std_logic;

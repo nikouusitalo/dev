@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: When
+# key: wh
+# group: VHDL
+# --
+when ${1} =>
+	${2}

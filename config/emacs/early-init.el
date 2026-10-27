@@ -1,4 +1,5 @@
 ;;; early-init.el --- Early Init -*- lexical-binding: t; -*-
+(setq read-process-output-max (* 1024 1024))
 (setq default-frame-alist
       '((background-color . "#000000")
         (foreground-color . "#ffffff")))

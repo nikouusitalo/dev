@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Output std_logic_vector
+# key: osv
+# group: VHDL
+# --
+${1} : out std_logic_vector (${2} downto 0);

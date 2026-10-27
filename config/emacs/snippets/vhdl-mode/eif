@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Elsif
+# key: eif
+# group: VHDL
+# --
+elsif ${1} then
+	${2}

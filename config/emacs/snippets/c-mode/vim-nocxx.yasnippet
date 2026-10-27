@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: C: nocxx
+# key: nocxx
+# group: C templates
+# --
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+${0}
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif

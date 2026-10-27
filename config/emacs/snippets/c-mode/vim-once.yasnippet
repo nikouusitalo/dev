@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: C: once
+# key: once
+# group: C templates
+# --
+#ifndef ${1:`(upcase (concat (replace-regexp-in-string "[^A-Za-z0-9_]" "_" (if buffer-file-name (file-name-base buffer-file-name) "UNTITLED")) "_H"))`}
+
+#define $1
+
+${0}
+
+#endif /* end of include guard: $1 */

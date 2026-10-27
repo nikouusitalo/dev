@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Xilinx UNISIM library
+# key: libx
+# group: VHDL
+# --
+library UNISIM;
+use UNISIM.VCOMPONENTS.ALL;

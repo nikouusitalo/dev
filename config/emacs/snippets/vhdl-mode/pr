@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: Process
+# key: pr
+# group: VHDL
+# --
+process (${1})
+begin
+	${2}
+end process;

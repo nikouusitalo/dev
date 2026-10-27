@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: C: tds
+# key: tds
+# group: C templates
+# --
+/*! \struct $2
+ *  \brief ${5:Brief struct description}
+ *
+ *  ${6:Detailed description}
+ */
+typedef struct ${2:_$1 }{
+	m_${3:Data} /*!< ${4:Description} */
+} ${1:`(if buffer-file-name (concat (replace-regexp-in-string "[^A-Za-z0-9_]" "_" (file-name-base buffer-file-name)) "_t") "name")`};

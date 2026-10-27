@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: Sublime: bench
+# key: bench
+# group: Sublime
+# uuid: sublime-Rust-bench
+# --
+
+#[bench]
+fn ${1:name}(b: &mut test::Bencher) {
+	${2:b.iter(|| ${3:/* benchmark code */})}
+}

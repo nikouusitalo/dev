@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Sublime: #!/usr/bin/env
+# key: !env
+# group: Sublime
+# uuid: sublime-ShellScript-env-shebang
+# --
+#!/usr/bin/env ${1:`(if (boundp 'sh-shell) (symbol-name sh-shell) "bash")`}
+$0

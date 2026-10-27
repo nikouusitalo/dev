@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Others aggregate
+# key: oth
+# group: VHDL
+# --
+(others => '${1:0}');

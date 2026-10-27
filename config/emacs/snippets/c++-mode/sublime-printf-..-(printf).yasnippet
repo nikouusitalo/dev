@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Sublime: printf …
+# key: printf
+# group: Sublime
+# uuid: sublime-C++-printf-..-(printf)
+# --
+printf("${1:%s}\\n"${1:$(if (string-match-p "%" (replace-regexp-in-string "%%" "" yas-text)) ", " ");")}$2${1:$(if (string-match-p "%" (replace-regexp-in-string "%%" "" yas-text)) ");" "")}

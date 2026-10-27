@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: Sublime: repeat … done
+# key: repeat
+# group: Sublime
+# uuid: sublime-ShellScript-repeat
+# condition: (and (boundp 'sh-shell) (eq sh-shell 'zsh))
+# --
+repeat ${1:expr}; do
+	${0:# statements}
+done

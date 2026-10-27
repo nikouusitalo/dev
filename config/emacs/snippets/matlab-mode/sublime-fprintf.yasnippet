@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Sublime: fprintf
+# key: fpr
+# group: Sublime
+# uuid: sublime-Matlab-fprintf
+# --
+fprintf(${1:fid}, '${2:%s}\\n'${2:$(if (string-match-p "%" (replace-regexp-in-string "%%" "" yas-text)) ", " ");")}$3${2:$(if (string-match-p "%" (replace-regexp-in-string "%%" "" yas-text)) ");" "")}

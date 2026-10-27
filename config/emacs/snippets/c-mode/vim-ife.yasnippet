@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: C: ife
+# key: ife
+# group: C templates
+# --
+if (${1:true}) {
+	${2:`(or yas-selected-text "")`}
+} else {
+	${0}
+}

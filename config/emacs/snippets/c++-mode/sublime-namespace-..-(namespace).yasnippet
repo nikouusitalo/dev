@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: Sublime: Namespace
+# key: ns
+# group: Sublime
+# uuid: sublime-C++-namespace-..-(namespace)
+# --
+namespace ${1:`(if buffer-file-name (file-name-base buffer-file-name) "name")`}
+{
+	$0
+}

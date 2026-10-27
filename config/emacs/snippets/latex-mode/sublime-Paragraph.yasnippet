@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: Sublime: Paragraph
+# key: \par
+# group: Sublime
+# uuid: sublime-LaTeX-Paragraph
+# --
+\paragraph{${1:paragraph name}} % (fold)
+\label{par:${2:${1:$(downcase (replace-regexp-in-string "[^[:alnum:]_]+" "_" yas-text))}}}
+${0:`(or yas-selected-text "")`}
+% paragraph $2 (end)

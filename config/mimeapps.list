@@ -1,22 +1,23 @@
+[Added Associations]
+image/jpeg=org.kde.gwenview.desktop;img.desktop;com.brave.Browser.desktop;okularApplication_kimgio.desktop;vivaldi-snapshot.desktop;google-chrome.desktop;com.google.Chrome.desktop;org.kde.kolourpaint.desktop;brave-browser.desktop;
+
 [Default Applications]
-
-# xdg-open will use these settings to determine how to open filetypes.
-# These .desktop entries can also be seen and changed in ~/.local/share/applications/
-
-text/x-shellscript=text.desktop;
-x-scheme-handler/magnet=torrent.desktop;
-application/x-bittorrent=torrent.desktop;
-x-scheme-handler/mailto=mail.desktop;
-text/plain=text.desktop;
+application/pdf=emacs.desktop;
 application/postscript=pdf.desktop;
-application/pdf=pdf.desktop;
-image/png=img.desktop;
-image/jpeg=img.desktop;
-image/gif=img.desktop;
 application/rss+xml=rss.desktop
-video/x-matroska=video.desktop
+application/x-bittorrent=torrent.desktop;
+image/gif=img.desktop;
+image/jpeg=org.kde.gwenview.desktop;
+image/png=img.desktop;
+text/html=google-chrome.desktop
+text/plain=text.desktop;
+text/x-shellscript=text.desktop;
 video/mp4=mpv.desktop
-x-scheme-handler/lbry=lbry.desktop
-inode/directory=file.desktop
-x-scheme-handler/etcher=balenaEtcher.desktop
+video/x-matroska=video.desktop
 x-scheme-handler/codex=chatgpt.desktop
+x-scheme-handler/etcher=balenaEtcher.desktop
+x-scheme-handler/http=google-chrome.desktop
+x-scheme-handler/https=google-chrome.desktop
+x-scheme-handler/lbry=lbry.desktop
+x-scheme-handler/magnet=torrent.desktop;
+x-scheme-handler/mailto=mail.desktop;

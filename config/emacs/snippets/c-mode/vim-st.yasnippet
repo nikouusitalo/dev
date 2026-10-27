@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: C: st
+# key: st
+# group: C templates
+# --
+/*! \struct $1
+ *  \brief ${3:Brief struct description}
+ *
+ *  ${4:Detailed description}
+ */
+struct ${1:`(if buffer-file-name (concat (replace-regexp-in-string "[^A-Za-z0-9_]" "_" (file-name-base buffer-file-name)) "_t") "name")`} {
+	${2:Data} /*!< ${6:Description} */
+}${5: /* optional variable list */};

@@ -27,6 +27,7 @@ goo() {
 
 alias kk="task ghistory"
 alias arvio="task burndown.weekly"
+alias dev='(cd "$HOME/code/dev" && ./dev)'
 amk() {
     git config user.name "Niko Uusitalo"
     git config user.email "niko.uusitalo@edu.turkuamk.fi"
@@ -74,3 +75,9 @@ if ! shopt -oq posix; then
   fi
 fi
 
+
+# opencode
+export PATH=/home/nikouu/.opencode/bin:$PATH
+
+# Generated for envman. Do not edit.
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"

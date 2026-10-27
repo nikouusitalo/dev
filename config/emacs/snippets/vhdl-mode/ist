@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Input std_logic
+# key: ist
+# group: VHDL
+# --
+${1} : in std_logic;

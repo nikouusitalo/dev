@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: C: switchndef
+# key: switchndef
+# group: C templates
+# --
+switch (${1:/* variable */}) {
+	case ${2:/* variable case */}:
+		${3}
+		${4:break;}${5}
+}

@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: Sublime: Sub Sub Section
+# key: \subs
+# group: Sublime
+# uuid: sublime-LaTeX-subsubsection-..-(ssub)
+# --
+\subsubsection{${1:subsubsection name}} % (fold)
+\label{ssub:${2:${1:$(downcase (replace-regexp-in-string "[^[:alnum:]_]+" "_" yas-text))}}}
+${0:`(or yas-selected-text "")`}
+% subsubsection $2 (end)

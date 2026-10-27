@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: Sublime: New Property
+# key: property
+# group: Sublime
+# uuid: sublime-Python-New-Property
+# --
+`(if (save-excursion (skip-chars-backward "A-Za-z") (eq (char-before) ?@)) "" "@")`property
+def ${1:foo}(self):
+	return self.${2:_$1}
+$0

@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: Sublime: New Class
+# key: class
+# group: Sublime
+# uuid: sublime-Python-New-Class
+# --
+class ${1:ClassName}(${2:object}):
+	"""${3:docstring for $1}"""
+
+	def __init__(self${4:, arg}):
+		${5:super().__init__()}
+		$0

@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: Sublime: foreach … done
+# key: foreachin
+# group: Sublime
+# uuid: sublime-ShellScript-foreach-in
+# condition: (and (boundp 'sh-shell) (eq sh-shell 'zsh))
+# --
+foreach ${1:var} in ${2:10}; do
+	${0:# statements}
+done

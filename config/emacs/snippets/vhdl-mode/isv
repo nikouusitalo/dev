@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Input std_logic_vector
+# key: isv
+# group: VHDL
+# --
+${1} : in std_logic_vector (${2} downto 0);

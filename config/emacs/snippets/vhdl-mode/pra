@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: Process all (VHDL-2008)
+# key: pra
+# group: VHDL
+# --
+process (${1:all})
+begin
+	${2}
+end process;

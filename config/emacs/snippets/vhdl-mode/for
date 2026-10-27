@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: For loop
+# key: for
+# group: VHDL
+# --
+for ${1:i} in ${2} ${3:to} ${4} loop
+	${5}
+end loop;

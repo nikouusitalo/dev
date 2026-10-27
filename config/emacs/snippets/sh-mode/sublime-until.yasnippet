@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: Sublime: until … done
+# key: until
+# group: Sublime
+# uuid: sublime-ShellScript-until
+# --
+until ${2:[[ ${1:condition} ]]}; do
+	${0:#statements}
+done

@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: Sublime: match … { … }
+# key: match
+# group: Sublime
+# uuid: sublime-Rust-match
+# --
+match ${1:expr} {
+	${2:Some(expr)} => ${3:expr},
+	${4:None} => ${5:expr},
+}

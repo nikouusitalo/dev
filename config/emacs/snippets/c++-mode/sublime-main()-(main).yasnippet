@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: Sublime: main()
+# key: main
+# group: Sublime
+# uuid: sublime-C++-main()-(main)
+# condition: (not (save-excursion (skip-chars-backward "A-Za-z") (looking-back "\\_<int[ \t]+" (line-beginning-position))))
+# --
+int main(int argc, char const *argv[])
+{
+	${0:/* code */}
+	return 0;
+}

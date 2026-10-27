@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Else
+# key: el
+# group: VHDL
+# --
+else
+	${1}

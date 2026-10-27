@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: Entity
+# key: ent
+# group: VHDL
+# --
+entity ${1:`(if buffer-file-name (file-name-base buffer-file-name) "entity_name")`} is
+	generic (
+		${2}
+	);
+	port (
+		${3}
+	);
+end entity $1;

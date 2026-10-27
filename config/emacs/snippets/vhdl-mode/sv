@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Signal std_logic_vector
+# key: sv
+# group: VHDL
+# --
+signal ${1} : std_logic_vector (${2} downto 0);

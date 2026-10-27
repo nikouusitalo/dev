@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Case
+# key: ca
+# group: VHDL
+# --
+case ${1} is
+	${2}
+end case;

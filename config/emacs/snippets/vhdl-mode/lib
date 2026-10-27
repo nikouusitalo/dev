@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Library
+# key: lib
+# group: VHDL
+# --
+library ${1:library_name};
+use $1.${2:package_name}.all;

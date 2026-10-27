@@ -16,7 +16,7 @@ export TASKDATA=$HOME/vault/task
 export PASSWORD_STORE_DIR=$HOME/vault/pass
 export PATH=$PATH:/usr/bin/python3
 export EDITOR="nvim"
-export READER="zathura"
+export READER="emacs"
 export VISUAL="nvim"
 export CODEEDITOR="nvim"
 export COLORTERM="truecolor"
@@ -34,3 +34,6 @@ export MOZ_ENABLE_WAYLAND=1
 #export WM="sway"
 export OPENER="xdg-open"
 export VIDEO="mpv"
+
+# Generated for envman. Do not edit.
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"

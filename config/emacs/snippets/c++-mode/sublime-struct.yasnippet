@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: Sublime: struct
+# key: struct
+# group: Sublime
+# uuid: sublime-C++-struct
+# --
+struct ${1:`(if buffer-file-name (file-name-base buffer-file-name) "name")`}
+{
+	$0
+};

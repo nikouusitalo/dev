@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: Sublime: for … in … done
+# key: forin
+# group: Sublime
+# uuid: sublime-ShellScript-for-in
+# --
+for ${1:i}${2:$(if (string-empty-p yas-text) "" " in ")}${2:words}; do
+	${0:#statements}
+done

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Sublime: #include <…>
+# key: Inc
+# group: Sublime
+# uuid: sublime-C++-#include-(inc angle)
+# condition: (not (save-excursion (skip-chars-backward "A-Za-z") (looking-back "^[ \t]*#[ \t]*" (line-beginning-position))))
+# --
+#include <${1:.h}>

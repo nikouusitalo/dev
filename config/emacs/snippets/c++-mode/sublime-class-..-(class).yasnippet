@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: Sublime: class-..-(class)
+# key: class
+# group: Sublime
+# uuid: sublime-C++-class-..-(class)
+# --
+class ${1:`(if buffer-file-name (file-name-base buffer-file-name) "name")`}
+{
+public:
+	${1:$(car (split-string yas-text))}($2);
+	~${1:$(car (split-string yas-text))}();
+	$0
+};

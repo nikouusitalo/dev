@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: Sublime: Sub Paragraph
+# key: \subp
+# group: Sublime
+# uuid: sublime-LaTeX-Sub-Paragraph
+# --
+\subparagraph{${1:subparagraph name}} % (fold)
+\label{subp:${2:${1:$(downcase (replace-regexp-in-string "[^[:alnum:]_]+" "_" yas-text))}}}
+${0:`(or yas-selected-text "")`}
+% subparagraph $2 (end)

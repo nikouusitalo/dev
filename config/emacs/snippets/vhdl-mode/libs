@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: IEEE libraries
+# key: libs
+# group: VHDL
+# --
+library IEEE;
+use IEEE.std_logic_1164.ALL;
+use IEEE.numeric_std.ALL;

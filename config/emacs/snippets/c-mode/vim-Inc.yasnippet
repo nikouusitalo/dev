@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: C: Inc
+# key: Inc
+# group: C templates
+# --
+#include "${1:`(concat (if buffer-file-name (file-name-base buffer-file-name) "file") ".h")`}"

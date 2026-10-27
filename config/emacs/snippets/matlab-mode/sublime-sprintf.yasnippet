@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Sublime: sprintf
+# key: spr
+# group: Sublime
+# uuid: sublime-Matlab-sprintf
+# --
+sprintf('${1:%s}\\n'${1:$(if (string-match-p "%" (replace-regexp-in-string "%%" "" yas-text)) ", " ");")}$2${1:$(if (string-match-p "%" (replace-regexp-in-string "%%" "" yas-text)) ");" "")}
