@@ -90,6 +90,12 @@
   ;; Let evil-org own agenda bindings and its initial Evil state.
   (evil-collection-init (remove 'org-agenda evil-collection-mode-list)))
 
+(use-package evil-surround
+  :ensure t
+  :after evil
+  :config
+  (global-evil-surround-mode 1))
+
 (use-package evil-org
   :ensure t
   :after evil
@@ -190,6 +196,7 @@
     :prefix "SPC")
 
   (my/leader
+    "SPC" #'switch-to-buffer
     "a" #'org-agenda
     "s b" #'my/find-book
     "s n" #'my/find-note
